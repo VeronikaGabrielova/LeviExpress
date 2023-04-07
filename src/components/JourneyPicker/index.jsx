@@ -10,33 +10,37 @@ export const JourneyPicker = ({ onJourneyChange }) => {
   const [dates, setDates] = useState([]);
   const [cities, setCities] = useState([]);
 
+  useEffect(() => {
+    Promise.all([
+      fetch("https://apps.kodim.cz/daweb/leviexpress/api/cities"),
+      fetch("https://apps.kodim.cz/daweb/leviexpress/api/dates"),
+    ])
+      .then(([response1, response2]) =>
+        Promise.all([response1.json(), response2.json()])
+      )
+      .then(([data1, data2]) => {
+        setCities(data1.results);
+        setDates(data2.results);
+      })
+
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  //Nevím
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(fromCity, toCity, date);
+
+    fetch(
+      `https://apps.kodim.cz/daweb/leviexpress/api/journey?fromCity=${fromCity}&toCity=${toCity}&date=${date}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        onJourneyChange(data.results);
+      })
+      .catch((error) => console.error(error));
   };
-
-
-useEffect (()=>{
-  Promise.all([
-    fetch("https://apps.kodim.cz/daweb/leviexpress/api/cities"),
-    fetch("https://apps.kodim.cz/daweb/leviexpress/api/dates")
-  ])
-  .then(([response1, response2]) => Promise.all([response1.json(), response2.json()]))
-  .then(([data1, data2]) => {
-    setCities(data1.results);
-    setDates(data2.results);
-  })
-  .catch((error) => {
-    // Zpracování chyby
-    console.error(error);
-  });
-},[]);
-
-
-
-
-
-
 
   return (
     <div className="journey-picker container">
@@ -65,7 +69,11 @@ useEffect (()=>{
             </select>
           </label>
           <div className="journey-picker__controls">
-            <button className="btn" type="submit">
+            <button
+              disabled={!fromCity || !toCity || !date}
+              className="btn"
+              type="submit"
+            >
               Vyhledat spoj
             </button>
           </div>
@@ -83,7 +91,7 @@ const CityOptions = ({ cities }) => {
       {cities.map((city) => {
         return (
           <Fragment key={city.code}>
-            <option value={city.name}>{city.name}</option>
+            <option value={city.code}>{city.name}</option>
           </Fragment>
         );
       })}
@@ -91,20 +99,15 @@ const CityOptions = ({ cities }) => {
   );
 };
 
-
-
 const DatesOptions = ({ dates }) => {
-
   return (
     <>
       <option value="">Vyberte</option>
       {dates.map((date) => {
-      
         return (
           <Fragment key={date.dateBasic}>
             <option value={date.dateBasic}>{date.dateCs}</option>
           </Fragment>
-          
         );
       })}
     </>
