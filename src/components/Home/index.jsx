@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { JourneyPicker } from "../JourneyPicker";
+import JourneyDetail from "../JourneyDetail";
 
 export const Home = () => {
   const [journey, setJourney] = useState(null);
 
   const handleJourneyChange = (journey) => {
-    console.log(journey)
+    console.log(journey);
     setJourney(journey);
   };
   console.log(journey);
@@ -14,7 +15,7 @@ export const Home = () => {
       <main>
         <JourneyPicker onJourneyChange={handleJourneyChange} />
 
-        {journey && <p>Nalezeno spojení s id {journey.journeyId}</p>}
+        {journey !== null && <JourneyDetail journey={journey} />}
       </main>
     </>
   );
