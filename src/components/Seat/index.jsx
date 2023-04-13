@@ -1,15 +1,15 @@
 import React from "react";
 import "./style.css";
 
-const Seat = ({ number, isOccupied, isSelected }) => {
-  
-  const seatClass = isOccupied ? "seat seat--occupied": "seat"
-  const selectedClass = isSelected ? "seat seat--selected" : "seat";
+const Seat = ({ number, isOccupied, isSelected, onSelect }) => {
+  const seatClass = isOccupied ? "seat--occupied" : "seat";
+  const selectedClass = isSelected ? "seat--selected" : "seat";
 
   return (
     <>
       <svg
         className={`${seatClass} ${selectedClass}`}
+        onClick={onSelect}
         viewBox="0 0 100 100"
         role="button"
       >

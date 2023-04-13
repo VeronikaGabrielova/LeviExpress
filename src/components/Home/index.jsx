@@ -7,11 +7,18 @@ import SeatPicker from "../SeatPicker";
 export const Home = () => {
   const navigate = useNavigate();
   const [journey, setJourney] = useState(null);
+  const [userSeat, setUserSeat] = useState(null);
 
   const handleJourneyChange = (journey) => {
     console.log(journey);
     setJourney(journey);
   };
+
+  const handleSeatSelect = (seatNumber) => {
+    console.log(seatNumber);
+    setUserSeat(seatNumber);
+  };
+
   const handleBuy = () => {
     console.log("funguju");
     fetch(`https://apps.kodim.cz/daweb/leviexpress/api/reservation`, {
@@ -21,7 +28,7 @@ export const Home = () => {
       },
       body: JSON.stringify({
         action: "create",
-        seat: journey.autoSeat,
+        seat: userSeat,
         journeyId: journey.journeyId,
       }),
     })
@@ -35,7 +42,8 @@ export const Home = () => {
         <JourneyPicker onJourneyChange={handleJourneyChange} />
         {journey !== null && (
           <SeatPicker
-            selectedSeat={journey.autoSeat}
+            selectedSeat={userSeat}
+            onSelect={handleSeatSelect}
             seats={journey.seats}
             journeyId={journey.journeyId}
           />
