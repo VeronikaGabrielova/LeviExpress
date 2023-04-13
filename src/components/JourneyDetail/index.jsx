@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 import BusStop from "../BusStop";
-import SelectedSeat from "../SelectedSeat";
+
 
 const JourneyDetail = ({ journey }) => {
   return (
@@ -12,7 +12,6 @@ const JourneyDetail = ({ journey }) => {
           <BusStop journey={journey} />
         </div>
       </div>
-      {journey && <SelectedSeat number={journey.autoSeat} />}
     </>
   );
 };
