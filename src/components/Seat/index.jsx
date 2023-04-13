@@ -2,13 +2,13 @@ import React from "react";
 import "./style.css";
 
 const Seat = ({ number, isOccupied, isSelected, onSelect }) => {
-  const seatClass = isOccupied ? "seat--occupied" : "seat";
-  const selectedClass = isSelected ? "seat--selected" : "seat";
+  const seatClass = isOccupied ? "seat--occupied" : "";
+  const selectedClass = isSelected ? "seat--selected" : "";
 
   return (
     <>
       <svg
-        className={`${seatClass} ${selectedClass}`}
+        className={`seat ${seatClass} ${selectedClass}`}
         onClick={onSelect}
         viewBox="0 0 100 100"
         role="button"
